@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
@@ -13,7 +12,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     <form [formGroup]="form" (ngSubmit)="save()">
       <mat-form-field style="width:100%"><mat-label>Nome</mat-label><input matInput formControlName="nome"></mat-form-field>
       <mat-form-field style="width:100%"><mat-label>Email</mat-label><input matInput formControlName="email"></mat-form-field>
-      <mat-form-field style="width:100%"><mat-label>Telefone</mat-label><input matInput formControlName="telefone"></mat-form-field>
+      <mat-form-field style="width:100%">
+        <mat-label>Telefone</mat-label>
+        <input matInput formControlName="telefone" phoneMask placeholder="(XX)XXXXX-XXXX">
+        <mat-error *ngIf="form.get('telefone')?.hasError('pattern')">Formato: (XX)XXXXX-XXXX</mat-error>
+      </mat-form-field>
       <mat-form-field style="width:100%"><mat-label>Data Cadastro</mat-label><input matInput formControlName="dataCadastro" placeholder="YYYY-MM-DD"></mat-form-field>
       <div style="margin-top:12px">
         <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Salvar</button>
@@ -32,18 +35,32 @@ export class UserFormComponent implements OnInit {
     this.form = this.fb.group({
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telefone: ['', Validators.required],
+      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\d{5}-\d{4}$/)]],
       dataCadastro: ['']
     });
     this.route.paramMap.subscribe(p=>{
       const id = p.get('id');
-      if(id){ this.isEdit = true; this.id = Number(id); this.usersService.get(this.id).subscribe(u=> this.form.patchValue(u)); }
+      if(id){ 
+        this.isEdit = true; 
+        this.id = Number(id); 
+        this.usersService.get(this.id).subscribe(u=> this.form.patchValue(u)); 
+      }
     });
   }
   save(){
     const value = this.form.value;
-    if(this.isEdit){ this.usersService.update(this.id!, value).subscribe(()=>{ this.snack.open('Atualizado','OK',{duration:2000}); this.router.navigate(['/users']); }); }
-    else { this.usersService.create(value).subscribe(()=>{ this.snack.open('Criado','OK',{duration:2000}); this.router.navigate(['/users']); }); }
+    if(this.isEdit){ 
+      this.usersService.update(this.id!, value).subscribe(()=>{ 
+        this.snack.open('Atualizado','OK',{duration:2000}); 
+        this.router.navigate(['/users']); 
+      }); 
+    }
+    else { 
+      this.usersService.create(value).subscribe(()=>{ 
+        this.snack.open('Criado','OK',{duration:2000}); 
+        this.router.navigate(['/users']); 
+      }); 
+    }
   }
   cancel(){ this.router.navigate(['/users']); }
 }

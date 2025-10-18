@@ -22,6 +22,7 @@ import { BooksComponent } from './books/books.component';
 import { BookFormComponent } from './books/book-form.component';
 import { LoansComponent } from './loans/loans.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
+import { PhoneMaskDirective } from './users/phone-mask.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RecommendationsComponent } from './recommendations/recommendations.comp
     BooksComponent,
     BookFormComponent,
     LoansComponent,
-    RecommendationsComponent
+    RecommendationsComponent,
+    PhoneMaskDirective
   ],
   imports: [
     BrowserModule,
