@@ -17,15 +17,16 @@ This is the **frontend application** for the **Library Management System**, buil
 * **Angular CLI** – Install globally (if not already):
 ```bash
   npm install -g @angular/cli
-
+```
 
 ### Steps
 
 * **Install dependencies:** 
-  Check your versions with:
   ```bash
   npm install
+   ```
 
 * **Run the application:**
 ```bash
   npm start
+```
