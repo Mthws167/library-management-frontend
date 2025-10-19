@@ -1,12 +1,17 @@
-
 import { Injectable } from '@angular/core';
-import { BooksService } from './books.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class RecommendationService {
-  constructor(private booksService: BooksService) { }
+  private apiUrl = `${environment.apiUrl}/recommendations`;
 
-  recommendByCategory(categoria: string) {
-    return this.booksService.list();
+  constructor(private http: HttpClient) {}
+
+  getRecommendations(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
   }
 }

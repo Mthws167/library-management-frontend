@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BooksService } from '../services/books.service';
@@ -8,21 +7,57 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-book-form',
   template: `
-  <mat-card>
-    <h2>{{ isEdit ? 'Editar' : 'Novo' }} Livro</h2>
-    <form [formGroup]="form" (ngSubmit)="save()">
-      <mat-form-field style="width:100%"><mat-label>Título</mat-label><input matInput formControlName="titulo"></mat-form-field>
-      <mat-form-field style="width:100%"><mat-label>Autor</mat-label><input matInput formControlName="autor"></mat-form-field>
-      <mat-form-field style="width:100%"><mat-label>ISBN</mat-label><input matInput formControlName="isbn"></mat-form-field>
-      <mat-form-field style="width:100%"><mat-label>Categoria</mat-label><input matInput formControlName="categoria"></mat-form-field>
-      <mat-form-field style="width:100%"><mat-label>Data Publicação</mat-label><input matInput formControlName="dataPublicacao" placeholder="YYYY-MM-DD"></mat-form-field>
-      <div style="margin-top:12px">
-        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Salvar</button>
-        <button mat-button type="button" (click)="cancel()">Cancelar</button>
-      </div>
-    </form>
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEdit ? 'Editar' : 'Novo' }} Livro</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <mat-form-field appearance="fill" style="width:100%">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="titulo">
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:100%">
+          <mat-label>Autor</mat-label>
+          <input matInput formControlName="autor">
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:100%">
+          <mat-label>ISBN</mat-label>
+          <input matInput formControlName="isbn">
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:100%">
+          <mat-label>Categoria</mat-label>
+          <input matInput formControlName="categoria">
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:100%">
+          <mat-label>Data Publicação</mat-label>
+          <input matInput formControlName="dataPublicacao" placeholder="YYYY-MM-DD">
+        </mat-form-field>
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+            <mat-icon>save</mat-icon> Salvar
+          </button>
+          <button mat-button type="button" (click)="cancel()">
+            <mat-icon>cancel</mat-icon> Cancelar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
   </mat-card>
-  `
+  `,
+  styles: [`
+    .form-card {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+      gap: 8px;
+    }
+  `]
 })
 export class BookFormComponent implements OnInit {
   form!: FormGroup;
