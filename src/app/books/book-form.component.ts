@@ -63,7 +63,14 @@ export class BookFormComponent implements OnInit {
   form!: FormGroup;
   isEdit = false;
   id?: number;
-  constructor(private fb: FormBuilder, private booksService: BooksService, private route: ActivatedRoute, private router: Router, private snack: MatSnackBar) { }
+  constructor(
+    private fb: FormBuilder,
+    private booksService: BooksService,
+    private route: ActivatedRoute, 
+    private router: Router,
+    private snack: MatSnackBar) 
+  { }
+
   ngOnInit(): void {
     this.form = this.fb.group({
       titulo: ['', Validators.required],
@@ -74,7 +81,10 @@ export class BookFormComponent implements OnInit {
     });
     this.route.paramMap.subscribe(p => {
       const id = p.get('id');
-      if (id) { this.isEdit = true; this.id = Number(id); this.booksService.get(this.id).subscribe(b => this.form.patchValue(b)); }
+      if (id) { 
+        this.isEdit = true; this.id = Number(id); 
+        this.booksService.get(this.id).subscribe(b => this.form.patchValue(b)); 
+      }
     });
   }
   save() {
@@ -105,5 +115,7 @@ export class BookFormComponent implements OnInit {
     }
   }
 
-  cancel() { this.router.navigate(['/books']); }
+  cancel() { 
+    this.router.navigate(['/books']);
+   }
 }

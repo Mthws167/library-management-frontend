@@ -63,11 +63,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class UsersComponent implements OnInit {
   users: User[] = [];
-  displayedColumns = ['nome','email','telefone','actions'];
-  constructor(private usersService: UsersService, private router: Router, private snack: MatSnackBar) {}
-  ngOnInit(): void { this.load(); }
-  load(){ this.usersService.list().subscribe(u=> this.users = u); }
-  new(){ this.router.navigate(['/users/new']); }
-  edit(id?: number){ this.router.navigate(['/users', id, 'edit']); }
-  remove(id?: number){ this.usersService.delete(id!).subscribe(()=>{ this.snack.open('Removido','OK',{duration:2000}); this.load(); }); }
+  displayedColumns = ['nome', 'email', 'telefone', 'actions'];
+  constructor(private usersService: UsersService, private router: Router, private snack: MatSnackBar) { }
+  ngOnInit(): void {
+    this.load();
+  }
+  load() {
+    this.usersService.list().subscribe(u => this.users = u);
+  }
+  new() {
+    this.router.navigate(['/users/new']);
+  }
+  edit(id?: number) {
+    this.router.navigate(['/users', id, 'edit']);
+  }
+  remove(id?: number) {
+    this.usersService.delete(id!).subscribe(() => { this.snack.open('Removido', 'OK', { duration: 2000 }); this.load(); });
+  }
 }

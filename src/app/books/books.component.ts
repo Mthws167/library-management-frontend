@@ -110,12 +110,28 @@ export class BooksComponent implements OnInit {
   googleBooks: any[] = [];
   googleDisplayedColumns = ['title', 'authors', 'isbn', 'actions'];
   searchControl = new FormControl('', Validators.required);
+
   constructor(private booksService: BooksService, private router: Router, private snack: MatSnackBar) { }
-  ngOnInit(): void { this.load(); }
-  load() { this.booksService.list().subscribe(b => this.books = b); }
-  new() { this.router.navigate(['/books/new']); }
-  edit(id?: number) { this.router.navigate(['/books', id, 'edit']); }
-  remove(id?: number) { this.booksService.delete(id!).subscribe(() => { this.snack.open('Removido', 'OK', { duration: 2000 }); this.load(); }); }
+
+  ngOnInit(): void {
+    this.load();
+  }
+
+  load() { 
+    this.booksService.list().subscribe(b => this.books = b);
+  }
+
+  new() {
+    this.router.navigate(['/books/new']);
+  }
+
+  edit(id?: number) {
+    this.router.navigate(['/books', id, 'edit']);
+  }
+
+  remove(id?: number) {
+    this.booksService.delete(id!).subscribe(() => { this.snack.open('Removido', 'OK', { duration: 2000 }); this.load(); });
+  }
 
   searchGoogleBooks() {
     const title = this.searchControl.value;

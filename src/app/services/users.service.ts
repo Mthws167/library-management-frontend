@@ -11,9 +11,19 @@ export class UsersService {
   private api = `${environment.apiUrl}/users`;
   constructor(private http: HttpClient) { }
 
-  list(): Observable<User[]> { return this.http.get<User[]>(this.api); }
-  get(id: number) { return this.http.get<User>(`${this.api}/${id}`); }
-  create(user: User) { return this.http.post<User>(this.api, user); }
-  update(id: number, user: User) { return this.http.put<User>(`${this.api}/${id}`, user); }
-  delete(id: number) { return this.http.delete(`${this.api}/${id}`); }
+  list(): Observable<User[]> {
+    return this.http.get<User[]>(this.api);
+  }
+  get(id: number) {
+    return this.http.get<User>(`${this.api}/${id}`);
+  }
+  create(user: User) {
+    return this.http.post<User>(this.api, user);
+  }
+  update(id: number, user: User) {
+    return this.http.put<User>(`${this.api}/${id}`, user);
+  }
+  delete(id: number) {
+    return this.http.delete(`${this.api}/${id}`);
+  }
 }

@@ -99,8 +99,15 @@ export class LoansComponent implements OnInit {
   selectedBookId?: number;
   displayedColumns = ['usuario', 'email', 'telefone', 'livro', 'autor', 'status', 'actions'];
   constructor(private loansService: LoansService, private usersService: UsersService, private booksService: BooksService, private snack: MatSnackBar) { }
-  ngOnInit(): void { this.load(); this.usersService.list().subscribe(u => this.users = u); this.booksService.list().subscribe(b => this.books = b); }
-  load() { this.loansService.list().subscribe(l => this.loans = l); }
+  
+  ngOnInit(): void {
+    this.load(); this.usersService.list().subscribe(u => this.users = u); this.booksService.list().subscribe(b => this.books = b);
+  }
+  
+  load() {
+    this.loansService.list().subscribe(l => this.loans = l);
+  }
+
   createLoan() {
     if (this.selectedUserId && this.selectedBookId) {
       this.loansService.create({
@@ -122,5 +129,10 @@ export class LoansComponent implements OnInit {
     }
   }
 
-  returnLoan(id?: number) { this.loansService.updateStatus(id!, 'RETURNED').subscribe(() => { this.snack.open('Devolvido', 'OK', { duration: 2000 }); this.load(); }); }
+  returnLoan(id?: number) {
+    this.loansService.updateStatus(id!, 'RETURNED').subscribe(() => {
+      this.snack.open('Devolvido', 'OK', { duration: 2000 });
+      this.load();
+    });
+  }
 }
