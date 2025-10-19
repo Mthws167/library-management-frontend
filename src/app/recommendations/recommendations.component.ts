@@ -37,6 +37,12 @@ import { RecommendationService } from '../services/recommendation.service';
   </mat-card>
   `,
   styles: [`
+    p {
+      color: white;
+    }
+    mat-card-title {
+      color: white;
+    }
     .recommendations-card {
       margin: 20px;
     }

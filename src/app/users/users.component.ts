@@ -47,6 +47,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   </mat-card>
   `,
   styles: [`
+    mat-card-title {
+      color: white;
+    }
     .list-card {
       margin: 20px;
     }

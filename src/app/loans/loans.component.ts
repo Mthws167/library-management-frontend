@@ -70,6 +70,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   </mat-card>
   `,
   styles: [`
+    mat-card-title {
+      color: white;
+    }
     .loans-card {
       margin: 20px;
     }
@@ -95,9 +98,29 @@ export class LoansComponent implements OnInit {
   selectedUserId?: number;
   selectedBookId?: number;
   displayedColumns = ['usuario', 'email', 'telefone', 'livro', 'autor', 'status', 'actions'];
-  constructor(private loansService: LoansService, private usersService: UsersService, private booksService: BooksService, private snack: MatSnackBar) {}
-  ngOnInit(): void { this.load(); this.usersService.list().subscribe(u=> this.users = u); this.booksService.list().subscribe(b=> this.books = b); }
-  load(){ this.loansService.list().subscribe(l=> this.loans = l); }
-  createLoan(){ if(this.selectedUserId && this.selectedBookId){ this.loansService.create({userId:this.selectedUserId, bookId:this.selectedBookId}).subscribe(()=>{ this.snack.open('Emprestado','OK',{duration:2000}); this.load(); }); } }
-  returnLoan(id?: number){ this.loansService.updateStatus(id!, 'RETURNED').subscribe(()=>{ this.snack.open('Devolvido','OK',{duration:2000}); this.load(); }); }
+  constructor(private loansService: LoansService, private usersService: UsersService, private booksService: BooksService, private snack: MatSnackBar) { }
+  ngOnInit(): void { this.load(); this.usersService.list().subscribe(u => this.users = u); this.booksService.list().subscribe(b => this.books = b); }
+  load() { this.loansService.list().subscribe(l => this.loans = l); }
+  createLoan() {
+    if (this.selectedUserId && this.selectedBookId) {
+      this.loansService.create({
+        userId: this.selectedUserId,
+        bookId: this.selectedBookId
+      }).subscribe({
+        next: () => {
+          this.snack.open('Empréstimo criado com sucesso!', 'OK', { duration: 2000 });
+          this.load();
+        },
+        error: (err) => {
+          console.log(err);
+          const message = err.error?.error || 'Erro ao criar o empréstimo.';
+          this.snack.open(message, 'Fechar', { duration: 3000 });
+        }
+      });
+    } else {
+      this.snack.open('Usuário e livro devem ser selecionados.', 'Fechar', { duration: 3000 });
+    }
+  }
+
+  returnLoan(id?: number) { this.loansService.updateStatus(id!, 'RETURNED').subscribe(() => { this.snack.open('Devolvido', 'OK', { duration: 2000 }); this.load(); }); }
 }

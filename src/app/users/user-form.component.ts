@@ -43,6 +43,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   </mat-card>
   `,
   styles: [`
+    mat-card-title {
+      color: white;
+    }
     .form-card {
       max-width: 600px;
       margin: 20px auto;
@@ -60,7 +63,7 @@ export class UserFormComponent implements OnInit {
   form!: FormGroup;
   isEdit = false;
   id?: number;
-  constructor(private fb: FormBuilder, private usersService: UsersService, private route: ActivatedRoute, private router: Router, private snack: MatSnackBar) {}
+  constructor(private fb: FormBuilder, private usersService: UsersService, private route: ActivatedRoute, private router: Router, private snack: MatSnackBar) { }
   ngOnInit(): void {
     this.form = this.fb.group({
       nome: ['', Validators.required],
@@ -68,29 +71,42 @@ export class UserFormComponent implements OnInit {
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\d{5}-\d{4}$/)]],
       dataCadastro: ['']
     });
-    this.route.paramMap.subscribe(p=>{
+    this.route.paramMap.subscribe(p => {
       const id = p.get('id');
-      if(id){ 
-        this.isEdit = true; 
-        this.id = Number(id); 
-        this.usersService.get(this.id).subscribe(u=> this.form.patchValue(u)); 
+      if (id) {
+        this.isEdit = true;
+        this.id = Number(id);
+        this.usersService.get(this.id).subscribe(u => this.form.patchValue(u));
       }
     });
   }
-  save(){
+  save() {
     const value = this.form.value;
-    if(this.isEdit){ 
-      this.usersService.update(this.id!, value).subscribe(()=>{ 
-        this.snack.open('Atualizado','OK',{duration:2000}); 
-        this.router.navigate(['/users']); 
-      }); 
-    }
-    else { 
-      this.usersService.create(value).subscribe(()=>{ 
-        this.snack.open('Criado','OK',{duration:2000}); 
-        this.router.navigate(['/users']); 
-      }); 
+
+    if (this.isEdit) {
+      this.usersService.update(this.id!, value).subscribe({
+        next: () => {
+          this.snack.open('Usuário atualizado com sucesso!', 'OK', { duration: 2000 });
+          this.router.navigate(['/users']);
+        },
+        error: (err) => {
+          const message = err.error?.error || 'Erro ao atualizar o usuário.';
+          this.snack.open(message, 'Fechar', { duration: 3000 });
+        }
+      });
+    } else {
+      this.usersService.create(value).subscribe({
+        next: () => {
+          this.snack.open('Usuário criado com sucesso!', 'OK', { duration: 2000 });
+          this.router.navigate(['/users']);
+        },
+        error: (err) => {
+          const message = err.error?.error || 'Erro ao criar o usuário.';
+          this.snack.open(message, 'Fechar', { duration: 3000 });
+        }
+      });
     }
   }
-  cancel(){ this.router.navigate(['/users']); }
+
+  cancel() { this.router.navigate(['/users']); }
 }

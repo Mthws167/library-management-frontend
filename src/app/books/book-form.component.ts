@@ -63,7 +63,7 @@ export class BookFormComponent implements OnInit {
   form!: FormGroup;
   isEdit = false;
   id?: number;
-  constructor(private fb: FormBuilder, private booksService: BooksService, private route: ActivatedRoute, private router: Router, private snack: MatSnackBar) {}
+  constructor(private fb: FormBuilder, private booksService: BooksService, private route: ActivatedRoute, private router: Router, private snack: MatSnackBar) { }
   ngOnInit(): void {
     this.form = this.fb.group({
       titulo: ['', Validators.required],
@@ -72,15 +72,38 @@ export class BookFormComponent implements OnInit {
       categoria: ['', Validators.required],
       dataPublicacao: ['']
     });
-    this.route.paramMap.subscribe(p=>{
+    this.route.paramMap.subscribe(p => {
       const id = p.get('id');
-      if(id){ this.isEdit = true; this.id = Number(id); this.booksService.get(this.id).subscribe(b=> this.form.patchValue(b)); }
+      if (id) { this.isEdit = true; this.id = Number(id); this.booksService.get(this.id).subscribe(b => this.form.patchValue(b)); }
     });
   }
-  save(){
+  save() {
     const value = this.form.value;
-    if(this.isEdit){ this.booksService.update(this.id!, value).subscribe(()=>{ this.snack.open('Atualizado','OK',{duration:2000}); this.router.navigate(['/books']); }); }
-    else { this.booksService.create(value).subscribe(()=>{ this.snack.open('Criado','OK',{duration:2000}); this.router.navigate(['/books']); }); }
+
+    if (this.isEdit) {
+      this.booksService.update(this.id!, value).subscribe({
+        next: () => {
+          this.snack.open('Atualizado com sucesso!', 'OK', { duration: 2000 });
+          this.router.navigate(['/books']);
+        },
+        error: (err) => {
+          const message = err.error?.error || 'Erro ao atualizar o livro.';
+          this.snack.open(message, 'Fechar', { duration: 3000 });
+        }
+      });
+    } else {
+      this.booksService.create(value).subscribe({
+        next: () => {
+          this.snack.open('Criado com sucesso!', 'OK', { duration: 2000 });
+          this.router.navigate(['/books']);
+        },
+        error: (err) => {
+          const message = err.error?.error || 'Erro ao criar o livro.';
+          this.snack.open(message, 'Fechar', { duration: 3000 });
+        }
+      });
+    }
   }
-  cancel(){ this.router.navigate(['/books']); }
+
+  cancel() { this.router.navigate(['/books']); }
 }
